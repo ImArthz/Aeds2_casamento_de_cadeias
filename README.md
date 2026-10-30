@@ -21,7 +21,7 @@ O projeto investiga o paradigma de casamento exato de cadeias (*String Matching*
 ## Autores (Grupo - Tema 5)
 
 - **Integrante 1:** Arthur de Oliveira Mendonca
-- **Integrante 2:** [Nome Completo do Integrante 2]
+- **Integrante 2:** Italo Xavier Fonseca
 - **Integrante 3:** [Nome Completo do Integrante 3]
 - **Integrante 4:** [Nome Completo do Integrante 4]
 - **Integrante 5:** [Nome Completo do Integrante 5]

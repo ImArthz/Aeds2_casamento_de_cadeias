@@ -7,7 +7,7 @@
 
 ## Divisão da Equipe (5 Integrantes — 8 Minutos por Integrante)
 
-- **Integrante 1 (00:00 – 08:00):** `[NOME DO INTEGRANTE 1]` — *Problema Motivador em Genômica, Formalização (Cormen Cap. 32.1) e Por Que a Força Bruta Falha no DNA.*
+- **Integrante 1 (00:00 – 08:00):** `c[NOME DO INTEGRANTE 1]` — *Problema Motivador em Genômica, Formalização (Cormen Cap. 32.1) e Por Que a Força Bruta Falha no DNA.*
 - **Integrante 2 (08:00 – 16:00):** `[NOME DO INTEGRANTE 2]` — *Algoritmo de Rabin-Karp (Cap. 32.2): Regra de Horner, Rolling Hash em $O(1)$ e Colisões Espúrias.*
 - **Integrante 3 (16:00 – 24:00):** `[NOME DO INTEGRANTE 3]` — *Algoritmo Knuth-Morris-Pratt (Cap. 32.4): Propriedade Sufixo-Prefixo, Tabela $\pi$ e Demonstração Visual no Simulador.*
 - **Integrante 4 (24:00 – 32:00):** `[NOME DO INTEGRANTE 4]` — *Análise Assintótica Rigorosa ($O, \Omega, \Theta$), Prova Amortizada do KMP e Aplicação no Alinhamento Genético (Seeding).*
