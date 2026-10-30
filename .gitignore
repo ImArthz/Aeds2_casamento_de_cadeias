@@ -1,0 +1,23 @@
+# Binarios compilados
+bin/
+*.exe
+*.o
+*.out
+
+# Ambientes virtuais e caches
+.venv/
+__pycache__/
+*.pyc
+
+# Arquivos auxiliares do LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
