@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador Visual: Casamento de Cadeias em Bioinformática (AED2 - CEFET-MG)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --background: #0f172a;
+      --foreground: #f8fafc;
+      --card: #1e293b;
+      --border: #334155;
+      --muted-foreground: #94a3b8;
+      --primary: #2563eb;
+      --primary-foreground: #ffffff;
+      --secondary: #334155;
+      --secondary-foreground: #f1f5f9;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-6">
+  <div class="max-w-5xl mx-auto space-y-5">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 class="text-xl font-bold text-[var(--foreground)]">Simulador Passo a Passo: KMP, Rabin-Karp e Força Bruta no DNA</h1>
+        <p class="text-sm text-[var(--muted-foreground)]">Material de Apoio para Aula Técnica (Cap. 32 Cormen) — DECOM-DV / CEFET-MG</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="carregarPreset('polia')" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border)] bg-[var(--secondary)] text-[var(--secondary-foreground)] hover:opacity-90">
+          Preset 1: Pior Caso Poli-A
+        </button>
+        <button onclick="carregarPreset('kmp_pi')" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border)] bg-[var(--secondary)] text-[var(--secondary-foreground)] hover:opacity-90">
+          Preset 2: Sobreposição KMP (Prefixo-Sufixo)
+        </button>
+        <button onclick="carregarPreset('colisao_rk')" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-[var(--border)] bg-[var(--secondary)] text-[var(--secondary-foreground)] hover:opacity-90">
+          Preset 3: Colisão Espúria Rabin-Karp
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+      <div class="md:col-span-5">
+        <label class="block text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] mb-1">Fita de DNA / Texto T[0..n-1]</label>
+        <input id="inputTexto" type="text" value="AAAAAAAAAAAAAAC" class="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] font-mono text-sm uppercase" />
+      </div>
+      <div class="md:col-span-3">
+        <label class="block text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] mb-1">Motif / Padrão P[0..m-1]</label>
+        <input id="inputPadrao" type="text" value="AAAAAC" class="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] font-mono text-sm uppercase" />
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] mb-1">Algoritmo</label>
+        <select id="selectAlg" onchange="reconstruirSimulacao()" class="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-sm">
+          <option value="kmp">KMP (Tabela π)</option>
+          <option value="rk">Rabin-Karp (Hash)</option>
+          <option value="naive">Ingênuo (Força Bruta)</option>
+        </select>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] mb-1">Primo q (Rabin-Karp)</label>
+        <select id="selectPrimo" onchange="reconstruirSimulacao()" class="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-sm">
+          <option value="13">q = 13 (Muitas colisões)</option>
+          <option value="101" selected>q = 101 (Didático)</option>
+          <option value="1009">q = 1009 (Seguro)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <button onclick="irParaPasso(0)" class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:opacity-80">Reiniciar</button>
+        <button onclick="passoAnterior()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:opacity-80">◀ Anterior</button>
+        <button id="btnPlay" onclick="alternarAutoPlay()" class="px-4 py-1.5 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-semibold hover:opacity-90">▶ Auto-Play</button>
+        <button onclick="proximoPasso()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:opacity-80">Próximo ▶</button>
+        <span id="labelPasso" class="ml-2 text-xs font-mono text-[var(--muted-foreground)]">Passo 1 / 1</span>
+      </div>
+
+      <div class="flex flex-wrap gap-6 text-xs">
+        <div>
+          <span class="text-[var(--muted-foreground)]">Comparações de Bases:</span>
+          <span id="metricaComp" class="font-bold font-mono text-sm ml-1">0</span>
+        </div>
+        <div>
+          <span class="text-[var(--muted-foreground)]">Deslocamento Atual (s):</span>
+          <span id="metricaShift" class="font-bold font-mono text-sm ml-1">0</span>
+        </div>
+        <div>
+          <span class="text-[var(--muted-foreground)]">Colisões Espúrias:</span>
+          <span id="metricaColisoes" class="font-bold font-mono text-sm ml-1">0</span>
+        </div>
+        <div>
+          <span class="text-[var(--muted-foreground)]">Casamentos Válidos:</span>
+          <span id="metricaHits" class="font-bold font-mono text-sm ml-1">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm space-y-4 overflow-x-auto">
+      <div class="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Janela de Alinhamento no Genoma</div>
+      <div id="gridAlinhamento" class="font-mono text-sm space-y-2 min-w-max"></div>
+      <div id="boxExplicacao" class="p-3.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-sm font-mono"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm">
+        <h3 class="text-sm font-bold mb-2" id="tituloAuxEsq">Função de Prefixo π[0..m-1] (KMP)</h3>
+        <div id="conteudoAuxEsq" class="text-xs font-mono space-y-2"></div>
+      </div>
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm">
+        <h3 class="text-sm font-bold mb-2">Resumo Comparativo na Mesma Entrada</h3>
+        <div id="conteudoResumoComparativo" class="text-xs space-y-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let passos = [];
+    let indiceAtual = 0;
+    let timerPlay = null;
+
+    function mapearBase(c) {
+      const m = { 'A': 0, 'C': 1, 'G': 2, 'T': 3 };
+      return m[c] !== undefined ? m[c] : (c.charCodeAt(0) % 4);
+    }
+
+    function calcularPi(P) {
+      const m = P.length;
+      const pi = new Array(m).fill(0);
+      let k = 0;
+      for (let q = 1; q < m; q++) {
+        while (k > 0 && P[k] !== P[q]) k = pi[k - 1];
+        if (P[k] === P[q]) k++;
+        pi[q] = k;
+      }
+      return pi;
+    }
+
+    function gerarPassosNaive(T, P) {
+      const lista = [];
+      const n = T.length, m = P.length;
+      let comp = 0;
+      const hits = [];
+      for (let s = 0; s <= n - m; s++) {
+        for (let j = 0; j < m; j++) {
+          comp++;
+          const igual = (T[s + j] === P[j]);
+          lista.push({
+            s, i: s + j, j, comp, colisoes: 0, hits: [...hits],
+            status: igual ? 'match_char' : 'mismatch_char',
+            msg: `s=${s}: Comparando T[${s+j}]='${T[s+j]}' com P[${j}]='${P[j]}' -> ${igual ? 'IGUAL (avança j)' : 'DIFERENTE (desloca janela para s=' + (s+1) + ' e reinicia j=0)'}`
+          });
+          if (!igual) break;
+          if (j === m - 1) {
+            hits.push(s);
+            lista.push({
+              s, i: s + j, j, comp, colisoes: 0, hits: [...hits],
+              status: 'full_match',
+              msg: `CASAMENTO EXATO encontrado no deslocamento s = ${s}!`
+            });
+          }
+        }
+      }
+      return lista;
+    }
+
+    function gerarPassosKMP(T, P) {
+      const lista = [];
+      const n = T.length, m = P.length;
+      const pi = calcularPi(P);
+      let comp = 0, q = 0;
+      const hits = [];
+
+      for (let i = 0; i < n; i++) {
+        while (q > 0) {
+          comp++;
+          const igual = (P[q] === T[i]);
+          if (igual) break;
+          const qAntigo = q;
+          q = pi[q - 1];
+          lista.push({
+            s: i - qAntigo, i, j: qAntigo, comp, colisoes: 0, hits: [...hits], qEstado: q,
+            status: 'mismatch_char',
+            msg: `i=${i}: T[${i}]='${T[i]}' != P[${qAntigo}]='${P[qAntigo]}'. Ponteiro i NÃO retrocede! Consulta tabela: q <- π[${qAntigo - 1}] = ${q} (salto de ${qAntigo - q} posições).`
+          });
+        }
+        comp++;
+        const igual = (P[q] === T[i]);
+        const sAtual = i - q;
+        if (igual) {
+          q++;
+          lista.push({
+            s: sAtual, i, j: q - 1, comp, colisoes: 0, hits: [...hits], qEstado: q,
+            status: (q === m) ? 'full_match' : 'match_char',
+            msg: (q === m)
+              ? `i=${i}: T[${i}]='${T[i]}' == P[${m-1}]. CASAMENTO COMPLETO em s = ${i + 1 - m}! Próximo estado: q <- π[${m-1}] = ${pi[m-1]}.`
+              : `i=${i}: T[${i}]='${T[i]}' == P[${q-1}]='${P[q-1]}'. Estado avança para q = ${q}.`
+          });
+          if (q === m) {
+            hits.push(i + 1 - m);
+            q = pi[q - 1];
+          }
+        } else {
+          lista.push({
+            s: i, i, j: 0, comp, colisoes: 0, hits: [...hits], qEstado: 0,
+            status: 'mismatch_char',
+            msg: `i=${i}: T[${i}]='${T[i]}' != P[0]='${P[0]}'. Permanece q = 0 e avança i.`
+          });
+        }
+      }
+      return lista;
+    }
+
+    function gerarPassosRK(T, P, qPrimo) {
+      const lista = [];
+      const n = T.length, m = P.length;
+      const d = 4;
+      let h = 1;
+      for (let i = 0; i < m - 1; i++) h = (h * d) % qPrimo;
+
+      let pHash = 0, tHash = 0;
+      for (let i = 0; i < m; i++) {
+        pHash = (d * pHash + mapearBase(P[i])) % qPrimo;
+        tHash = (d * tHash + mapearBase(T[i])) % qPrimo;
+      }
+
+      let comp = 0, colisoes = 0;
+      const hits = [];
+
+      for (let s = 0; s <= n - m; s++) {
+        const hashIgual = (pHash === tHash);
+        lista.push({
+          s, i: s, j: 0, comp, colisoes, hits: [...hits], pHash, tHash, h, d, qPrimo,
+          status: hashIgual ? 'hash_hit' : 'hash_skip',
+          msg: hashIgual
+            ? `s=${s}: Hash t_${s} = ${tHash} == p = ${pHash} (mod ${qPrimo}). Dispara verificação caractere a caractere!`
+            : `s=${s}: Hash t_${s} = ${tHash} != p = ${pHash} (mod ${qPrimo}). Descarta janela em O(1) sem comparar caracteres!`
+        });
+
+        if (hashIgual) {
+          let ok = true;
+          for (let j = 0; j < m; j++) {
+            comp++;
+            if (T[s + j] !== P[j]) {
+              ok = false;
+              colisoes++;
+              lista.push({
+                s, i: s + j, j, comp, colisoes, hits: [...hits], pHash, tHash, h, d, qPrimo,
+                status: 'mismatch_char',
+                msg: `s=${s}: COLISÃO ESPÚRIA! Embora t_${s} == p == ${pHash}, T[${s+j}]='${T[s+j]}' != P[${j}]='${P[j]}'.`
+              });
+              break;
+            }
+          }
+          if (ok) {
+            hits.push(s);
+            lista.push({
+              s, i: s + m - 1, j: m - 1, comp, colisoes, hits: [...hits], pHash, tHash, h, d, qPrimo,
+              status: 'full_match',
+              msg: `s=${s}: Verificação concluída (${m} bases iguais). CASAMENTO VERDADEIRO confirmado em s = ${s}!`
+            });
+          }
+        }
+
+        if (s < n - m) {
+          const sai = mapearBase(T[s]);
+          const entra = mapearBase(T[s + m]);
+          tHash = (d * (tHash - sai * h) + entra) % qPrimo;
+          if (tHash < 0) tHash += qPrimo;
+        }
+      }
+      return lista;
+    }
+
+    function renderizarPasso() {
+      const T = document.getElementById('inputTexto').value.toUpperCase().trim();
+      const P = document.getElementById('inputPadrao').value.toUpperCase().trim();
+      const alg = document.getElementById('selectAlg').value;
+      const qPrimo = parseInt(document.getElementById('selectPrimo').value, 10);
+
+      if (passos.length === 0) return;
+      const estado = passos[indiceAtual];
+
+      document.getElementById('labelPasso').textContent = `Passo ${indiceAtual + 1} / ${passos.length}`;
+      document.getElementById('metricaComp').textContent = estado.comp;
+      document.getElementById('metricaShift').textContent = estado.s;
+      document.getElementById('metricaColisoes').textContent = estado.colisoes;
+      document.getElementById('metricaHits').textContent = estado.hits.length > 0 ? estado.hits.join(', ') : '0';
+      document.getElementById('boxExplicacao').textContent = estado.msg;
+
+      let htmlIndices = '<div class="flex gap-1"><span class="w-16 text-xs text-[var(--muted-foreground)]">Índice:</span>';
+      let htmlTexto = '<div class="flex gap-1"><span class="w-16 text-xs font-bold">Texto T:</span>';
+      let htmlPadrao = '<div class="flex gap-1"><span class="w-16 text-xs font-bold">Padrão P:</span>';
+
+      for (let idx = 0; idx < T.length; idx++) {
+        htmlIndices += `<div class="w-7 text-center text-xs text-[var(--muted-foreground)]">${idx}</div>`;
+        let classeT = 'border-[var(--border)] bg-[var(--background)]';
+        if (idx === estado.i) {
+          classeT = (estado.status === 'mismatch_char')
+            ? 'border-red-500 bg-red-500/20 font-bold'
+            : 'border-emerald-500 bg-emerald-500/20 font-bold';
+        } else if (idx >= estado.s && idx < estado.s + P.length) {
+          classeT = 'border-[var(--primary)] bg-[var(--secondary)]';
+        }
+        htmlTexto += `<div class="w-7 h-7 flex items-center justify-center rounded border ${classeT}">${T[idx]}</div>`;
+      }
+
+      for (let idx = 0; idx < T.length; idx++) {
+        const jRel = idx - estado.s;
+        if (jRel >= 0 && jRel < P.length) {
+          let classeP = 'border-[var(--border)] bg-[var(--secondary)]';
+          if (jRel === estado.j) {
+            classeP = (estado.status === 'mismatch_char')
+              ? 'border-red-500 bg-red-500/20 font-bold'
+              : 'border-emerald-500 bg-emerald-500/20 font-bold';
+          }
+          htmlPadrao += `<div class="w-7 h-7 flex items-center justify-center rounded border ${classeP}">${P[jRel]}</div>`;
+        } else {
+          htmlPadrao += `<div class="w-7 h-7"></div>`;
+        }
+      }
+
+      htmlIndices += '</div>';
+      htmlTexto += '</div>';
+      htmlPadrao += '</div>';
+      document.getElementById('gridAlinhamento').innerHTML = htmlIndices + htmlTexto + htmlPadrao;
+
+      const pi = calcularPi(P);
+      if (alg === 'rk') {
+        document.getElementById('tituloAuxEsq').textContent = `Aritmética Modular do Rolling Hash (d = 4, q = ${qPrimo})`;
+        document.getElementById('conteudoAuxEsq').innerHTML = `
+          <div>• Multiplicador mais significativo: <b>h = d^(m-1) mod q = ${estado.h}</b></div>
+          <div>• Hash do Padrão P: <b>p = ${estado.pHash}</b></div>
+          <div>• Hash da Janela T[${estado.s}..${estado.s + P.length - 1}]: <b>t_${estado.s} = ${estado.tHash}</b></div>
+          <div class="pt-1 text-[var(--muted-foreground)]">Fórmula O(1): t_{s+1} = (4 · (t_s - T[s]·${estado.h}) + T[s+m]) mod ${qPrimo}</div>
+        `;
+      } else {
+        document.getElementById('tituloAuxEsq').textContent = `Função de Prefixo π[0..m-1] do Padrão P`;
+        let tabelaPi = '<div class="flex gap-1 items-center"><span class="w-12">q:</span>';
+        let linhaP = '<div class="flex gap-1 items-center"><span class="w-12">P[q]:</span>';
+        let linhaVal = '<div class="flex gap-1 items-center"><span class="w-12">π[q]:</span>';
+        for (let k = 0; k < P.length; k++) {
+          const destaque = (k === estado.j) ? 'border-[var(--primary)] bg-[var(--secondary)] font-bold' : 'border-[var(--border)]';
+          tabelaPi += `<div class="w-7 text-center text-[var(--muted-foreground)]">${k}</div>`;
+          linhaP += `<div class="w-7 h-6 flex items-center justify-center border rounded ${destaque}">${P[k]}</div>`;
+          linhaVal += `<div class="w-7 h-6 flex items-center justify-center border rounded ${destaque}">${pi[k]}</div>`;
+        }
+        tabelaPi += '</div>'; linhaP += '</div>'; linhaVal += '</div>';
+        document.getElementById('conteudoAuxEsq').innerHTML = tabelaPi + linhaP + linhaVal;
+      }
+
+      const pNaive = gerarPassosNaive(T, P);
+      const pKMP = gerarPassosKMP(T, P);
+      const pRK = gerarPassosRK(T, P, qPrimo);
+      const cNaive = pNaive.length ? pNaive[pNaive.length - 1].comp : 0;
+      const cKMP = pKMP.length ? pKMP[pKMP.length - 1].comp : 0;
+      const cRK = pRK.length ? pRK[pRK.length - 1].comp : 0;
+      const colRK = pRK.length ? pRK[pRK.length - 1].colisoes : 0;
+
+      document.getElementById('conteudoResumoComparativo').innerHTML = `
+        <div class="flex justify-between py-1 border-b border-[var(--border)]">
+          <span>Busca Ingênua (Força Bruta):</span>
+          <span class="font-mono font-bold">${cNaive} comparações</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[var(--border)]">
+          <span>Knuth-Morris-Pratt (KMP - Busca):</span>
+          <span class="font-mono font-bold">${cKMP} comparações</span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span>Rabin-Karp (q = ${qPrimo}):</span>
+          <span class="font-mono font-bold">${cRK} comparações (${colRK} colisões)</span>
+        </div>
+      `;
+    }
+
+    function reconstruirSimulacao() {
+      pararAutoPlay();
+      const T = document.getElementById('inputTexto').value.toUpperCase().trim();
+      const P = document.getElementById('inputPadrao').value.toUpperCase().trim();
+      const alg = document.getElementById('selectAlg').value;
+      const qPrimo = parseInt(document.getElementById('selectPrimo').value, 10);
+
+      if (!T || !P || P.length > T.length) return;
+      if (alg === 'naive') passos = gerarPassosNaive(T, P);
+      else if (alg === 'kmp') passos = gerarPassosKMP(T, P);
+      else passos = gerarPassosRK(T, P, qPrimo);
+
+      indiceAtual = 0;
+      renderizarPasso();
+    }
+
+    function proximoPasso() {
+      if (indiceAtual < passos.length - 1) {
+        indiceAtual++;
+        renderizarPasso();
+      } else {
+        pararAutoPlay();
+      }
+    }
+
+    function passoAnterior() {
+      if (indiceAtual > 0) {
+        indiceAtual--;
+        renderizarPasso();
+      }
+    }
+
+    function irParaPasso(idx) {
+      pararAutoPlay();
+      indiceAtual = idx;
+      renderizarPasso();
+    }
+
+    function alternarAutoPlay() {
+      if (timerPlay) {
+        pararAutoPlay();
+      } else {
+        document.getElementById('btnPlay').textContent = '⏸ Pausar';
+        timerPlay = setInterval(proximoPasso, 650);
+      }
+    }
+
+    function pararAutoPlay() {
+      if (timerPlay) {
+        clearInterval(timerPlay);
+        timerPlay = null;
+      }
+      document.getElementById('btnPlay').textContent = '▶ Auto-Play';
+    }
+
+    function carregarPreset(tipo) {
+      if (tipo === 'polia') {
+        document.getElementById('inputTexto').value = 'AAAAAAAAAAAAAAC';
+        document.getElementById('inputPadrao').value = 'AAAAAC';
+        document.getElementById('selectAlg').value = 'kmp';
+      } else if (tipo === 'kmp_pi') {
+        document.getElementById('inputTexto').value = 'ACAGACACACAGACACAGT';
+        document.getElementById('inputPadrao').value = 'ACAGACACAG';
+        document.getElementById('selectAlg').value = 'kmp';
+      } else if (tipo === 'colisao_rk') {
+        document.getElementById('inputTexto').value = 'ATTAAAGGTTTATACCTTCCCAGGTAAC';
+        document.getElementById('inputPadrao').value = 'TATAAA';
+        document.getElementById('selectAlg').value = 'rk';
+        document.getElementById('selectPrimo').value = '13';
+      }
+      reconstruirSimulacao();
+    }
+
+    document.getElementById('inputTexto').addEventListener('input', reconstruirSimulacao);
+    document.getElementById('inputPadrao').addEventListener('input', reconstruirSimulacao);
+    reconstruirSimulacao();
+  </script>
+</body>
+</html>
