@@ -1,0 +1,17 @@
+Dataset,Padrao,TamanhoM,Algoritmo,Ocorrencias,Comparacoes,ColisoesEspurias,TempoPreMs,TempoBuscaMs,TempoTotalMs
+SARS-CoV-2,Motif TATA-box,6,Ingenuo,20,42688,0,0,0.1137,0.1137
+SARS-CoV-2,Motif TATA-box,6,Rabin-Karp_q1e9,20,120,0,0.0001,0.1225,0.1226
+SARS-CoV-2,Motif TATA-box,6,Rabin-Karp_q101,20,412,197,0.0001,0.1253,0.1254
+SARS-CoV-2,Motif TATA-box,6,KMP,20,42503,0,0.0001,0.1335,0.1336
+SARS-CoV-2,Primer OMS RdRp-F2,22,Ingenuo,1,38495,0,0,0.0818,0.0818
+SARS-CoV-2,Primer OMS RdRp-F2,22,Rabin-Karp_q1e9,1,22,0,0.0001,0.1211,0.1212
+SARS-CoV-2,Primer OMS RdRp-F2,22,Rabin-Karp_q101,1,386,288,0.0001,0.1246,0.1247
+SARS-CoV-2,Primer OMS RdRp-F2,22,KMP,1,38403,0,0.0007,0.1077,0.1084
+SARS-CoV-2,Sitio Furina Spike,18,Ingenuo,1,36685,0,0,0.0693,0.0693
+SARS-CoV-2,Sitio Furina Spike,18,Rabin-Karp_q1e9,1,18,0,0.0001,0.1244,0.1245
+SARS-CoV-2,Sitio Furina Spike,18,Rabin-Karp_q101,1,366,285,0.0001,0.1243,0.1244
+SARS-CoV-2,Sitio Furina Spike,18,KMP,1,36371,0,0.0002,0.0921,0.0923
+SARS-CoV-2,Cauda Poli-A (25pb),25,Ingenuo,9,43065,0,0,0.0906,0.0906
+SARS-CoV-2,Cauda Poli-A (25pb),25,Rabin-Karp_q1e9,9,225,0,0.0001,0.1216,0.1217
+SARS-CoV-2,Cauda Poli-A (25pb),25,Rabin-Karp_q101,9,660,304,0.0001,0.1254,0.1255
+SARS-CoV-2,Cauda Poli-A (25pb),25,KMP,9,41751,0,0.0002,0.156,0.1562
