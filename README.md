@@ -1,5 +1,17 @@
 # Casamento de Cadeias em Sequencias Genomicas: Algoritmos de Rabin-Karp e Knuth-Morris-Pratt (KMP)
 
+<p align="left">
+  <a href="https://github.com/ImArthz/Aeds2_casamento_de_cadeias/releases/latest/download/relatorio_casamento_cadeias.pdf">
+    <img src="https://img.shields.io/badge/Relatorio_Tecnico_(LaTeX)-Baixar_PDF-d9381e?style=for-the-badge&logo=latex&logoColor=white" alt="Baixar Relatorio PDF">
+  </a>
+  <a href="https://htmlpreview.github.io/?https://github.com/ImArthz/Aeds2_casamento_de_cadeias/blob/main/docs/seminario/simulador_interativo.html">
+    <img src="https://img.shields.io/badge/Simulador_Visual-Abrir_KMP_%26_Rabin--Karp-0969da?style=for-the-badge" alt="Abrir Simulador Interativo">
+  </a>
+  <a href="https://github.com/ImArthz/Aeds2_casamento_de_cadeias/actions/workflows/build_and_latex.yml">
+    <img src="https://github.com/ImArthz/Aeds2_casamento_de_cadeias/actions/workflows/build_and_latex.yml/badge.svg" alt="Build C++ & LaTeX PDF">
+  </a>
+</p>
+
 Trabalho Teorico-Pratico desenvolvido para a disciplina de **Algoritmos e Estruturas de Dados II / Projeto e Analise de Algoritmos** do curso de Engenharia da Computacao no **CEFET-MG (Campus Divinopolis)**, sob orientacao do **Prof. Dr. Michel Pires da Silva**.
 
 O projeto investiga o paradigma de casamento exato de cadeias (*String Matching*, Capitulo 32 de Cormen et al.) atraves da implementacao em **C++17** dos algoritmos **Ingenuo (Forca Bruta)**, **Rabin-Karp** (*Rolling Hash* modular) e **Knuth-Morris-Pratt (KMP)**, avaliando suas implicacoes praticas na busca de motivos regulatorios, iniciadores de PCR (*primers*) e na etapa de semeacao (*seeding* de $k$-mers) para alinhamento genetico.
@@ -109,9 +121,15 @@ Ao extrair uma leitura de $120$ pb do inicio do gene *Spike* (posicao $21.562$) 
 
 ---
 
-## Relatorio Tecnico em LaTeX
+## Relatorio Tecnico em LaTeX (Download PDF)
 
-O codigo-fonte completo do relatorio tecnico (redigido com o pacote `algorithm2e`, diagramas em TikZ e o Apendice *Cheat Sheet*) encontra-se em [`docs/relatorio_latex/relatorio_casamento_cadeias.tex`](docs/relatorio_latex/relatorio_casamento_cadeias.tex). A cada *push* na branch `main`, o workflow do GitHub Actions compila automaticamente o PDF final e publica na aba **Releases** do repositorio.
+O codigo-fonte completo do relatorio tecnico (redigido com o pacote `algorithm2e`, diagramas em TikZ e o Apendice *Cheat Sheet*) encontra-se em [`docs/relatorio_latex/relatorio_casamento_cadeias.tex`](docs/relatorio_latex/relatorio_casamento_cadeias.tex). A cada *push* na branch `main`, o workflow do GitHub Actions compila automaticamente o PDF final e publica na aba **Releases** do repositorio:
+
+<p align="left">
+  <a href="https://github.com/ImArthz/Aeds2_casamento_de_cadeias/releases/latest/download/relatorio_casamento_cadeias.pdf">
+    <img src="https://img.shields.io/badge/Download_Direto-Relatorio_Tecnico_Completo_(PDF)-d9381e?style=for-the-badge&logo=latex&logoColor=white" alt="Download PDF">
+  </a>
+</p>
 
 ---
 
