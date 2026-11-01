@@ -22,7 +22,7 @@ O projeto investiga o paradigma de casamento exato de cadeias (*String Matching*
 
 - **Integrante 1:** Arthur de Oliveira Mendonca
 - **Integrante 2:** Italo Xavier Fonseca
-- **Integrante 3:** [Nome Completo do Integrante 3]
+- **Integrante 3:** Thiago Augusto Silva Martins
 - **Integrante 4:** [Nome Completo do Integrante 4]
 - **Integrante 5:** [Nome Completo do Integrante 5]
 
