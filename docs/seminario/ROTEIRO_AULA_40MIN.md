@@ -5,19 +5,19 @@
 
 ---
 
-## Divisão da Equipe (5 Integrantes — 8 Minutos por Integrante)
+## Estrutura da Apresentação (40 Minutos — 5 Blocos de 8 Minutos)
 
-- **Integrante 1 (00:00 – 08:00):** `c[NOME DO INTEGRANTE 1]` — *Problema Motivador em Genômica, Formalização (Cormen Cap. 32.1) e Por Que a Força Bruta Falha no DNA.*
-- **Integrante 2 (08:00 – 16:00):** `[NOME DO INTEGRANTE 2]` — *Algoritmo de Rabin-Karp (Cap. 32.2): Regra de Horner, Rolling Hash em $O(1)$ e Colisões Espúrias.*
-- **Integrante 3 (16:00 – 24:00):** `[NOME DO INTEGRANTE 3]` — *Algoritmo Knuth-Morris-Pratt (Cap. 32.4): Propriedade Sufixo-Prefixo, Tabela $\pi$ e Demonstração Visual no Simulador.*
-- **Integrante 4 (24:00 – 32:00):** `[NOME DO INTEGRANTE 4]` — *Análise Assintótica Rigorosa ($O, \Omega, \Theta$), Prova Amortizada do KMP e Aplicação no Alinhamento Genético (Seeding).*
-- **Integrante 5 (32:00 – 40:00):** `[NOME DO INTEGRANTE 5]` — *Engenharia da Implementação em C++17, Gargalos de Hardware/Cache nos Testes Reais (NCBI SARS-CoV-2) e Debate com a Turma.*
+- **Bloco 1 (00:00 – 08:00):** *Problema Motivador em Genômica, Formalização (Cormen Cap. 32.1) e Por Que a Força Bruta Falha no DNA.*
+- **Bloco 2 (08:00 – 16:00):** *Algoritmo de Rabin-Karp (Cap. 32.2): Regra de Horner, Rolling Hash em $O(1)$ e Colisões Espúrias.*
+- **Bloco 3 (16:00 – 24:00):** *Algoritmo Knuth-Morris-Pratt (Cap. 32.4): Propriedade Sufixo-Prefixo, Tabela $\pi$ e Demonstração Visual no Simulador.*
+- **Bloco 4 (24:00 – 32:00):** *Análise Assintótica Rigorosa ($O, \Omega, \Theta$), Prova Amortizada do KMP e Aplicação no Alinhamento Genético (Seeding).*
+- **Bloco 5 (32:00 – 40:00):** *Engenharia da Implementação em C++17, Gargalos de Hardware/Cache nos Testes Reais (NCBI SARS-CoV-2) e Debate com a Turma.*
 
 ---
 
 ## Cronograma Detalhado Passo a Passo
 
-### Bloco 1 (00:00 – 08:00) — `[NOME DO INTEGRANTE 1]`
+### Bloco 1 (00:00 – 08:00) — Problema Motivador em Bioinformática e Limitações no DNA
 **Objetivo:** Instigar a turma com um problema real de bioinformática e mostrar no quadro onde o algoritmo ingênuo desperdiça trabalho.
 
 1. **Pergunta Motivadora para a Sala (00:00 – 02:30):**
@@ -32,7 +32,7 @@
 
 ---
 
-### Bloco 2 (08:00 – 16:00) — `[NOME DO INTEGRANTE 2]`
+### Bloco 2 (08:00 – 16:00) — Algoritmo de Rabin-Karp: Regra de Horner, Rolling Hash e Colisões
 **Objetivo:** Construir a ideia algébrica do Rabin-Karp passo a passo: transformar subcadeias de DNA em números inteiros.
 
 1. **De Letras para Polinômios — Regra de Horner (08:00 – 10:30):**
@@ -53,7 +53,7 @@
 
 ---
 
-### Bloco 3 (16:00 – 24:00) — `[NOME DO INTEGRANTE 3]`
+### Bloco 3 (16:00 – 24:00) — Algoritmo KMP: Função de Prefixo π e Demonstração no Simulador
 **Objetivo:** Apresentar o KMP como a solução determinística que **nunca retrocede o ponteiro $i$ do texto** e demonstrar ao vivo no Simulador Visual.
 
 1. **A Intuição de Knuth, Morris e Pratt (16:00 – 18:30):**
@@ -70,7 +70,7 @@
 
 ---
 
-### Bloco 4 (24:00 – 32:00) — `[NOME DO INTEGRANTE 4]`
+### Bloco 4 (24:00 – 32:00) — Análise Assintótica Formal, Prova Amortizada e Seeding
 **Objetivo:** Formalizar a análise assintótica rigorosa ($O, \Omega, \Theta$) e explicar como Rabin-Karp e KMP entram no Alinhamento Genético real.
 
 1. **Debate de Análise Assintótica com a Turma (24:00 – 28:00):**
@@ -89,12 +89,12 @@
 
 ---
 
-### Bloco 5 (32:00 – 40:00) — `[NOME DO INTEGRANTE 5]`
+### Bloco 5 (32:00 – 40:00) — Engenharia em C++17, Gargalos de Hardware e Debate Final
 **Objetivo:** Apresentar os resultados reais em C++17 com o genoma do SARS-CoV-2 (`NC_045512.2`), discutir os gargalos de hardware/linguagem e fechar com o Cheat Sheet.
 
 1. **Resultados Práticos no Genoma do SARS-CoV-2 e Escala Progressiva (32:00 – 35:30):**
    - Mostrar os gráficos gerados a partir do código em C++17 (`tempo_escala_n.png`, `pior_caso_repetitivo.png` e `colisoes_rabin_karp.png`).
-   - Destacar o teste de *Seeding*: quando injetamos 2 mutações SNP em uma leitura de 120 pb do gene *Spike*, a busca exata da leitura inteira retorna 0 ocorrências, mas o *seeding* por Rabin-Karp ($k=15$) recupera 91 âncoras exatas apontando diretamente para o locus correto (`pos = 21.562`).
+   - Destacar o teste de *Seeding*: quando injetamos 2 mutações SNP em uma leitura de 120 pb do gene *Spike*, a busca exata da leitura inteira retorna 0 ocorrências, mas o *seeding* por Rabin-Karp ($k=15$) recupera 76 âncoras exatas apontando diretamente para o locus correto (`pos = 21.562`).
 2. **Gargalos Críticos de Hardware e Linguagem Descobertos na Prática (35:30 – 38:30):**
    - **Por que o Rabin-Karp tem constante oculta mais alta que o KMP em C++ para um único padrão?**
      - Na ALU do processador x86_64, a instrução de divisão inteira/resto (`idiv` gerada pelo operador `% q`) custa de **20 a 40 ciclos de clock**, enquanto a comparação de bytes na cache L1 (`cmp`) do KMP custa **1 ciclo de clock**.
