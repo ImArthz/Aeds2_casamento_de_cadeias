@@ -342,7 +342,7 @@ A Figura \ref{fig:tikz_rk} ilustra o mecanismo alg\'ebrico de atualiza\c{c}\~ao 
 \label{fig:tikz_rk}
 \end{figure}
 
-A Figura \ref{fig:tikz_kmp} demonstra o comportamento do KMP e da tabela $\pi$ diante de uma falha ap\'os casar $q = 5$ bases do padr\~ao $P = \texttt{ACAGAC}$. Como o sufixo \texttt{AC} de $P_5 = \texttt{ACAGA}$? N\~ao, para $P_5 = \texttt{ACAGA}$, o maior prefixo pr\'oprio de $P$ que tamb\'em \'e sufixo de $P_5$ \'e $P_1 = \texttt{A}$ ($\pi[5] = 1$). Assim, o padr\~ao desliza diretamente $q - \pi[q] = 5 - 1 = 4$ posi\c{c}\~oes sem retroceder o \'indice de leitura do texto.
+A Figura \ref{fig:tikz_kmp} demonstra o comportamento do KMP e da tabela $\pi$ diante de uma falha ap\'os casar $q = 5$ bases do padr\~ao $P = \texttt{ACAGAC}$. Observando o prefixo casado $P_5 = \texttt{ACAGA}$, verifica-se que o maior prefixo pr\'oprio de $P$ que tamb\'em \'e sufixo de $P_5$ \'e $P_1 = \texttt{A}$ ($\pi[5] = 1$). Assim, o padr\~ao desliza diretamente $q - \pi[q] = 5 - 1 = 4$ posi\c{c}\~oes sem retroceder o \'indice de leitura do texto.
 
 \begin{figure}[H]
 \centering
@@ -384,7 +384,7 @@ A Figura \ref{fig:tikz_kmp} demonstra o comportamento do KMP e da tabela $\pi$ d
 \label{fig:tikz_kmp}
 \end{figure}
 
-Por fim, a Figura \ref{fig:tikz_seeding} apresenta o fluxograma da integra\c{c}\~ao dos algoritmos de casamento exato dentro de uma pipeline de alinhamento gen\'etico (*Seed-and-Extend*).
+Por fim, a Figura \ref{fig:tikz_seeding} apresenta o fluxograma da integra\c{c}\~ao dos algoritmos de casamento exato dentro de uma pipeline de alinhamento gen\'etico (\textit{Seed-and-Extend}).
 
 \begin{figure}[H]
 \centering
@@ -486,7 +486,7 @@ Todo o c\'odigo-fonte em C++17, os conjuntos de dados gen\^omicos em formato FAS
     \url{https://github.com/ImArthz/Aeds2_casamento_de_cadeias.git}
 \end{center}
 
-A solu\c{c}\~ao foi estruturada nos m\'odulos \texttt{include/casamento\_cadeias.hpp}, \texttt{src/casamento\_cadeias.cpp} (contendo as implementa\c{c}\~oes instrumentadas de busca ing\^enua, Rabin-Karp, KMP e o motor de \textit{seeding} de $k$-mers), \texttt{src/fasta\_io.cpp} (leitor de arquivos FASTA e gerador de sequ\^encias sint\'eticas de DNA) e \texttt{src/main.cpp}. O c\'odigo foi compilado com otimiza\c{c}\~ao m\'axima (\texttt{-std=c++17 -O3}) para avalia\c{c}\~ao fiel ao n\'ivel de m\'aquina.
+{\sloppy A solu\c{c}\~ao foi estruturada nos m\'odulos \texttt{include/casamento\_cadeias.hpp} e \texttt{src/casamento\_cadeias.cpp} (contendo as implementa\c{c}\~oes instrumentadas de busca ing\^enua, Rabin-Karp, KMP e o motor de \textit{seeding} de $k$-mers), \texttt{src/fasta\_io.cpp} (leitor de arquivos FASTA e gerador de sequ\^encias sint\'eticas de DNA) e \texttt{src/main.cpp}. O c\'odigo foi compilado com otimiza\c{c}\~ao m\'axima (\texttt{-std=c++17 -O3}) para avalia\c{c}\~ao fiel ao n\'ivel de m\'aquina.\par}
 
 Para validar o comportamento em dados biol\'ogicos reais, coletamos do banco de dados \textbf{NCBI RefSeq} duas sequ\^encias de refer\^encia:
 \begin{enumerate}
@@ -501,7 +501,7 @@ Executamos os algoritmos sobre os $29.903$ pb do SARS-CoV-2 buscando quatro alvo
 \begin{table}[H]
 \centering
 \footnotesize
-\begin{tabular}{@{}llrrrr@{}}
+\resizebox{\textwidth}{!}{\begin{tabular}{@{}llrrrr@{}}
 \toprule
 \textbf{Padr\~ao Biol\'ogico} & \textbf{Algoritmo} & \textbf{Hits} & \textbf{Compara\c{c}\~oes} & \textbf{Colis\~oes} & \textbf{Tempo Total (ms)} \\ \midrule
 \multirow{4}{*}{Motif TATA-box ($m=6$)} 
@@ -524,7 +524,7 @@ Executamos os algoritmos sobre os $29.903$ pb do SARS-CoV-2 buscando quatro alvo
  & Rabin-Karp ($q=10^9+7$) & 9 & 225 & 0 & 0,1217 \\
  & Rabin-Karp ($q=101$) & 9 & 660 & 304 & 0,1255 \\
  & KMP & 9 & 41.751 & 0 & 0,1562 \\ \bottomrule
-\end{tabular}
+\end{tabular}}
 \caption{M\'etricas emp\'iricas de busca exata no genoma real do SARS-CoV-2 (\texttt{NC\_045512.2}, $29.903$ pb).}
 \label{tab:genoma_real}
 \end{table}
@@ -631,7 +631,7 @@ MENDON\c{C}A, A. O.; FONSECA, I. X.; MARTINS, T. A. S.; GUERREIRO, T.; TAVARES, 
 % =============================================================================
 % APENDICE EXIGIDO: CHEAT SHEET (GUIA DE CONSULTA RAPIDA - 1 PAGINA)
 % =============================================================================
-\appendix
+\appendix\setstretch{1.12}
 \section*{Ap\^endice: Cheat Sheet -- Casamento de Cadeias (Cap. 32)}
 \addcontentsline{toc}{section}{Ap\^endice: Cheat Sheet (Guia de Consulta R\'apida)}
 
@@ -647,7 +647,7 @@ Localizar todas as posi\c{c}\~oes de ocorr\^encia de um padr\~ao $P[1..m]$ dentr
 
 \begin{center}
 \begin{tikzpicture}[
-    node distance=0.65cm and 0.9cm,
+    node distance=0.45cm and 0.9cm,
     qbox/.style={rectangle, rounded corners, draw=black!80, fill=orange!12, text width=3.6cm, align=center, inner sep=4pt, font=\scriptsize\bfseries},
     ans/.style={rectangle, draw=black!80, fill=green!12, text width=3.5cm, align=center, inner sep=4pt, font=\scriptsize},
     arr/.style={-{Stealth[length=2mm]}, thick}
@@ -675,13 +675,13 @@ Localizar todas as posi\c{c}\~oes de ocorr\^encia de um padr\~ao $P[1..m]$ dentr
 \begin{table}[H]
 \centering
 \scriptsize
-\begin{tabular}{@{}lccccc@{}}
+\resizebox{\textwidth}{!}{\begin{tabular}{@{}lccccc@{}}
 \toprule
 \textbf{Algoritmo} & \textbf{Pr\'e-processamento} & \textbf{Melhor Caso ($\Omega$)} & \textbf{Caso M\'edio ($\Theta$)} & \textbf{Pior Caso ($O / \Theta$)} & \textbf{Espa\c{c}o Auxiliar} \\ \midrule
 \textbf{Ing\^enuo (For\c{c}a Bruta)} & $0$ (Nenhum) & $\Omega(n)$ & $\Theta(n)$ & $\Theta((n-m+1)m)$ & $\Theta(1)$ \\
 \textbf{Rabin-Karp} & $\Theta(m)$ & $\Omega(n - m + 1)$ & $\Theta(n + m)$ & $\Theta((n-m+1)m)$ & $\Theta(1)$ \\
 \textbf{Knuth-Morris-Pratt (KMP)} & $\Theta(m)$ & $\Omega(n + m)$ & $\Theta(n + m)$ & $\Theta(n + m)$ & $\Theta(m)$ \\ \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \vspace{-0.2cm}

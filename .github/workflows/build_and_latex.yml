@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Compile and Run C++17 Implementation
         run: |
@@ -24,13 +26,24 @@ jobs:
           g++ -std=c++17 -O3 -Wall -Wextra -Iinclude src/main.cpp src/casamento_cadeias.cpp src/fasta_io.cpp -o bin/casamento_cadeias
           ./bin/casamento_cadeias
 
-      - name: Compile LaTeX Report (Monografia + Cheat Sheet)
+      - name: Compile LaTeX Report (Multi-pass latexmk + pdflatex)
         uses: xu-cheng/latex-action@v3
         with:
           working_directory: docs/relatorio_latex
           root_file: relatorio_casamento_cadeias.tex
-          compiler: pdflatex
-          args: "-interaction=nonstopmode -halt-on-error"
+          compiler: latexmk
+          args: "-pdf -interaction=nonstopmode -halt-on-error"
+          post_compile: "pdflatex -interaction=nonstopmode relatorio_casamento_cadeias.tex && pdflatex -interaction=nonstopmode relatorio_casamento_cadeias.tex"
+
+      - name: Update Compiled PDF in Repository
+        run: |
+          git config user.name "Arthur Mendonça"
+          git config user.email "135072001+ImArthz@users.noreply.github.com"
+          git add docs/relatorio_latex/relatorio_casamento_cadeias.pdf
+          if ! git diff --staged --quiet; then
+            git commit -m "Atualiza PDF compilado do relatorio tecnico [skip ci]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
 
       - name: Publish PDF Release
         uses: softprops/action-gh-release@v2
@@ -40,9 +53,11 @@ jobs:
           body: |
             Entrega do Trabalho Teorico-Pratico de Projeto e Analise de Algoritmos (AEDS II - CEFET-MG Divinopolis):
             - Implementacao de Referencia em C++17 (Busca Ingenua, Rabin-Karp e Knuth-Morris-Pratt) aplicada a sequencias genomicas do NCBI (`NC_045512.2` e `NM_000546.6`).
-            - Relatorio Tecnico-Cientifico compilado em PDF (incluindo Apendice Cheat Sheet).
+            - Relatorio Tecnico-Cientifico compilado em PDF (incluindo Apendice Cheat Sheet e todas as referencias cruzadas resolvidas).
+            - Simulador Visual Interativo (`simulador_interativo.html`) autonomo (sem dependencias externas).
           files: |
             docs/relatorio_latex/relatorio_casamento_cadeias.pdf
+            docs/seminario/simulador_interativo.html
           make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

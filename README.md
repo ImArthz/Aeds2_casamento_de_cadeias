@@ -4,8 +4,8 @@
   <a href="https://github.com/ImArthz/Aeds2_casamento_de_cadeias/releases/latest/download/relatorio_casamento_cadeias.pdf">
     <img src="https://img.shields.io/badge/Relatorio_Tecnico_(LaTeX)-Baixar_PDF-d9381e?style=for-the-badge&logo=latex&logoColor=white" alt="Baixar Relatorio PDF">
   </a>
-  <a href="https://htmlpreview.github.io/?https://github.com/ImArthz/Aeds2_casamento_de_cadeias/blob/main/docs/seminario/simulador_interativo.html">
-    <img src="https://img.shields.io/badge/Simulador_Visual-Abrir_KMP_%26_Rabin--Karp-0969da?style=for-the-badge" alt="Abrir Simulador Interativo">
+  <a href="https://raw.githack.com/ImArthz/Aeds2_casamento_de_cadeias/main/docs/seminario/simulador_interativo.html">
+    <img src="https://img.shields.io/badge/Simulador_Visual-Abrir_Online_(KMP_%26_RK)-0969da?style=for-the-badge" alt="Abrir Simulador Interativo"></a> <a href="https://github.com/ImArthz/Aeds2_casamento_de_cadeias/releases/latest/download/simulador_interativo.html"><img src="https://img.shields.io/badge/Simulador_Offline-Baixar_HTML-1f883d?style=for-the-badge" alt="Baixar Simulador HTML">
   </a>
   <a href="https://github.com/ImArthz/Aeds2_casamento_de_cadeias/actions/workflows/build_and_latex.yml">
     <img src="https://github.com/ImArthz/Aeds2_casamento_de_cadeias/actions/workflows/build_and_latex.yml/badge.svg" alt="Build C++ & LaTeX PDF">
